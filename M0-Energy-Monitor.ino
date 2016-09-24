@@ -43,22 +43,6 @@ Adafruit_MQTT_Publish mqtt_power[SENSORS] = {
   Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/l2-real-power"),
   Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/l3-real-power")
 };
-
-/*************************** Error Reporting *********************************/
-
-Adafruit_MQTT_Subscribe errors = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/errors");
-Adafruit_MQTT_Subscribe throttle = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/throttle");
-
-// for each sensor we will print out real power and power factor
-typedef struct {
-  float apparentPower;
-  float realPower;
-  float powerFactor;
-} sEmonSensor;
-
-// Instance of measurement data structure
-sEmonSensor EmonTx[SENSORS];
-
 // Sensor pins
 #define PIN_V1  3
 #define PIN_CT1 0
@@ -66,9 +50,6 @@ sEmonSensor EmonTx[SENSORS];
 #define PIN_CT2 1
 #define PIN_V3  5
 #define PIN_CT3 2
-
-
-char emon_apikey[] = "148c5c52a8fe4da5cfe685edbd967884";
 
 void setup() {
 
@@ -106,16 +87,6 @@ void setup() {
 void loop() {
   MQTT_connect();
 
-  Adafruit_MQTT_Subscribe *subscription;
-  while ((subscription = mqtt.readSubscription(5000))) {
-    if(subscription == &errors) {
-      SerialUSB.print(F("ERROR: "));
-      SerialUSB.println((char *)errors.lastread);
-    } else if(subscription == &throttle) {
-      SerialUSB.println((char *)throttle.lastread);
-    }
-  }
-  
   for (int i = 0; i < SENSORS; i++) {
     // perform measurements
     emon[i].calcVI(16,2000);    // 2 h.c. for buffering + 14 h.c. for measuring
