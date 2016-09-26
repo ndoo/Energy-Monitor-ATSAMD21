@@ -25,16 +25,16 @@ EnergyMonitor emon[SENSORS];
 typedef struct {
   uint8_t ct_pin;     // Analog pin for current transformer
   float ct_cal;       // Calibration value for current transformer (90.9 for 22 ohm burden resistor on 3.3V)
-  char ct_feed[32];   // MQTT feed for Irms (leave any MQTT feed blank to not publish value)
+  char ct_feed[48];   // MQTT feed for Irms (leave any MQTT feed blank to not publish value)
   uint8_t vt_pin;     // Analog pin for 12VAC input
   float vt_cal;       // Calibration value for 12VAC transformer
   float vt_phasecal;  // Calibration angle for phase angle
   uint8_t vt_phase;   // Phase angle, 1/2/3
   float vt_voltage;   // Override voltage if not using 12VAC input with current transformer
-  char vt_feed[32];   // MQTT feed for Vrms
-  char ap_feed[32];   // MQTT feed for apparent power (Vrms * Irms)
-  char rp_feed[32];   // MQTT feed for calculated real power
-  char pf_feed[32];   // MQTT feed for calculated power factor
+  char vt_feed[48];   // MQTT feed for Vrms
+  char ap_feed[48];   // MQTT feed for apparent power (Vrms * Irms)
+  char rp_feed[48];   // MQTT feed for calculated real power
+  char pf_feed[48];   // MQTT feed for calculated power factor
 } sEmon;
 
 // Adafruit MQTT
